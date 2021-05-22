@@ -43,6 +43,7 @@ def UpdateBotSetting(key,value):
         db.child("BOTSETTING").update(data,user_n["idToken"])
 
 def GetDataBotSetting(key):
+    user_n = auth.refresh(user["refreshToken"])
     res = db.get(user_n["idToken"]).val()["BOTSETTING"][key]
     return res
 
