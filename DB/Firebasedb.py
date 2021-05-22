@@ -44,5 +44,5 @@ def UpdateBotSetting(key,value):
 
 def GetDataBotSetting(key):
     res = db.get(user_n["idToken"]).val()["BOTSETTING"][key]
-        return res
+    return res
 
