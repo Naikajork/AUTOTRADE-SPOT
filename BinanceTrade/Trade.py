@@ -28,12 +28,12 @@ def BUY(symbol,position_size):
                     return order
 
                 except Exception as e:
-                if e.code == -1013:
-                    dec_count = dec_count - 1
+                    if e.code == -1013:
+                        dec_count = dec_count - 1
 
-                else :
-                    print(e.args)
-                    return "เกิดข้อผิดพลาด"
+                    else :
+                        print(e.args)
+                        return "เกิดข้อผิดพลาด"
 
 
 def SELL(symbol,position_size=0,sell_all=True):
