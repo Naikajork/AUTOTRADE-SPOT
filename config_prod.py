@@ -25,4 +25,3 @@ firebaseClient = Firebase(firebaseConfig)
 auth = firebaseClient.auth()
 user = auth.sign_in_with_email_and_password(os.getenv("FIREBASE_EMAIL_AUTH"),os.getenv("FIREBASE_PASSWORD"))
 
-i
