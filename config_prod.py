@@ -14,7 +14,7 @@ from firebase import Firebase
 firebaseConfig = {
     "apiKey": os.getenv("FIREBASE_API_KEY"),
     "authDomain": "bottrading-databse.firebaseapp.com",
-    "databaseURL": "https://bottrading-databse-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "databaseURL": os.getenv("DATABASE_URL"),
     "projectId": "bottrading-databse",
     "storageBucket": "bottrading-databse.appspot.com",
     "messagingSenderId": "1091910107557",
