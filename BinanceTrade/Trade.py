@@ -14,28 +14,48 @@ def BUY(symbol,position_size):
         Interger = position_size.split(".")[0]
         decimal = position_size.split(".")[1]
         dec_count = -1
+        
+        if len(decimal) > 2:
+            while True:
+                position_size = Interger + "." + decimal[:dec_count]
+                if float(position_size) > 0:
+                    try:
 
-        while True:
-            position_size = Interger + "." + decimal[:dec_count]
-            if float(position_size) > 0:
-                try:
+                        order = client.order_market_buy(
+                            symbol=symbol,
+                            quantity=position_size
+                        )
 
-                    order = client.order_market_buy(
+                        return order
+
+                    except Exception as e:
+                        if e.code == -1013:
+                            dec_count = dec_count - 1
+
+                        else :
+                            print(e.args)
+                            return "เกิดข้อผิดพลาด"
+
+                        
+         else:
+            try:
+                order = client.order_market_buy(
                         symbol=symbol,
                         quantity=position_size
-                    )
+                )
 
-                    return order
+                return order
+            
+            except Exception as e:
+                if e.code == -1013:
+                    dec_count = dec_count - 1
 
-                except Exception as e:
-                    if e.code == -1013:
-                        dec_count = dec_count - 1
+                else :
+                    print(e.args)
+                    return "เกิดข้อผิดพลาด"
 
-                    else :
-                        print(e.args)
-                        return "เกิดข้อผิดพลาด"
-
-
+                
+                
 def SELL(symbol,position_size=0,sell_all=True):
     POS_SIZE = str(position_size)
     if sell_all:
@@ -68,7 +88,7 @@ def SELL(symbol,position_size=0,sell_all=True):
 def ReceiveSignals(signal_data_dict):
     if signal_data_dict["SIGNALS"] == "buy":
         try:
-            BUY(symbol=signal_data_dict["SYMBOL"],position_size=signal_data_dict["POSITION_SIZE"])
+            BUY(symbol=signal_data_dict["SYMBOL"],position_size=signal_data_dict["POSITION SIZE"])
             return "BUY {} SUCCESS! \nSIZE : {}".format(signal_data_dict["SYMBOL"],signal_data_dict["POSITION_SIZE"])
         except Exception as e:
             return "เกิดข้อผิดพลาด {}".format(e.args)
