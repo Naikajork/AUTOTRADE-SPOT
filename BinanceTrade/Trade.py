@@ -32,12 +32,11 @@ def BUY(symbol,position_size):
                         if e.code == -1013:
                             dec_count = dec_count - 1
 
-                        else :
+                        else:
                             print(e.args)
                             return "เกิดข้อผิดพลาด"
-
                         
-         else:
+        else:
             try:
                 order = client.order_market_buy(
                         symbol=symbol,
@@ -50,7 +49,7 @@ def BUY(symbol,position_size):
                 if e.code == -1013:
                     dec_count = dec_count - 1
 
-                else :
+                else:
                     print(e.args)
                     return "เกิดข้อผิดพลาด"
 
