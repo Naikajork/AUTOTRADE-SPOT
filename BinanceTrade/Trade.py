@@ -58,43 +58,53 @@ def BUY(symbol,position_size):
 def SELL(symbol,position_size=0,sell_all=True):
     POS_SIZE = str(position_size)
     if sell_all:
+        sym = symbol.split("BUSD")[0]
         POS_SIZE = client.get_asset_balance(sym)['free']
-    sym = symbol.split("BUSD")[0] #BTCBUSD --> BTC
-    # 0.00223445 --> [0 , 00223445]
-    Interger = POS_SIZE.split(".")[0]
-    decimal = POS_SIZE.split(".")[1]
-    dec_count = -1
+        Interger = POS_SIZE.split(".")[0]
+        decimal = POS_SIZE.split(".")[1]
+        dec_count = -1
 
-    while True:
-        position_size = Interger + "." + decimal[:dec_count]
-        if float(position_size) > 0:
-            try:
-                order = client.order_market_sell(
-                    symbol=symbol,
-                    quantity=position_size
-                )
+        while True:
+            position_size = Interger + "." + decimal[:dec_count]
+            if float(position_size) > 0:
+                try:
+                    order = client.order_market_sell(
+                        symbol=symbol,
+                        quantity=position_size
+                    )
 
-                return order
+                    return order
             
-            except Exception as e:
-                if e.code == -1013:
-                    dec_count = dec_count - 1
+                except Exception as e:
+                    if e.code == -1013:
+                        dec_count = dec_count - 1
 
-                else :
-                    print(e.args)
-                    return "เกิดข้อผิดพลาด"
+                    else :
+                        print(e.args)
+                        return "เกิดข้อผิดพลาด"
+                
+            else:
+                return "เกิดข้อผิดพลาด"
+                
+                    
 
 def ReceiveSignals(signal_data_dict):
     if signal_data_dict["SIGNALS"] == "buy":
         try:
-            BUY(symbol=signal_data_dict["SYMBOL"],position_size=signal_data_dict["POSITION SIZE"])
-            return "BUY {} SUCCESS! \nSIZE : {}".format(signal_data_dict["SYMBOL"],signal_data_dict["POSITION_SIZE"])
+            buy_information = BUY(symbol=signal_data_dict["SYMBOL"],position_size=signal_data_dict["POSITION SIZE"])
+            if buy_information == "เกิดข้อผิดพลาด":
+                return "BUY {} NOT SUCCESS!".format(signal_data_dict["SYMBOL"])
+            else:
+                return "BUY {} SUCCESS! \nSIZE : {}".format(signal_data_dict["SYMBOL"],signal_data_dict["POSITION SIZE"])
         except Exception as e:
             return "เกิดข้อผิดพลาด {}".format(e.args)
 
     elif signal_data_dict["SIGNALS"] == "sell":
         try:
-            SELL(symbol=signal_data_dict["SYMBOL"])
-            return "SELL {} SUCCESS".format(signal_data_dict["SYMBOL"])
+            sell_inforamtion = SELL(symbol=signal_data_dict["SYMBOL"])
+            if sell_inforamtion == "เกิดข้อผิดพลาด":
+                return "SELL {} NOT SUCCESS!".format(signal_data_dict["SYMBOL"])
+            else:
+                return "SELL {} SUCCESS!".format(signal_data_dict["SYMBOL"])
         except Exception as e:
             return "เกิดข้อผิดพลาด {}".format(e.args)
